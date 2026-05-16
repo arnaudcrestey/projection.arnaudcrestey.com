@@ -168,7 +168,7 @@ export function LeadForm({ projectionSnapshot, answers }: LeadFormProps) {
               <textarea
                 value={form.message}
                 onChange={(event) => updateField("message", event.target.value)}
-                placeholder="Vous pouvez ajouter ici une précision, une difficulté actuelle, un besoin particulier ou un contexte utile."
+                placeholder="Vous pouvez ajouter ici le lien de votre site, page, réseau social ou tout élément utile permettant de mieux comprendre votre activité."
                 rows={4}
                 className="min-h-[120px] w-full resize-y rounded-[18px] border border-[#d9e3f2] bg-white px-4 py-4 text-[14px] leading-7 text-[#17304f] shadow-[inset_0_1px_2px_rgba(15,23,42,0.02)] outline-none transition placeholder:text-[#9aacbf] focus:border-[#b7c9e8] focus:ring-4 focus:ring-[#eaf1ff] md:text-[15px]"
               />
