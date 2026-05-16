@@ -9,6 +9,7 @@ type SendProjectionLeadEmailParams = {
   firstName: string;
   email: string;
   activity?: string;
+  message?: string;
   answers?: ProjectionAnswers;
   projectionSnapshot?: ProjectionResult | null;
 };
@@ -55,6 +56,78 @@ function createTransporter() {
       pass,
     },
   });
+}
+
+function buildSystiaSignatureHtml() {
+  return `
+    <div style="text-align:center;margin-top:8px;">
+      <a
+        href="https://systia.fr"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="text-decoration:none;"
+      >
+        <div
+          style="
+            font-family:Georgia,'Times New Roman',serif;
+            font-size:40px;
+            line-height:1;
+            letter-spacing:-0.04em;
+            color:#10224b;
+            font-weight:400;
+            text-transform:uppercase;
+          "
+        >
+          SYSTIA
+        </div>
+      </a>
+
+      <div
+        style="
+          width:46px;
+          height:1px;
+          background:#d7ddea;
+          margin:12px auto 10px auto;
+        "
+      ></div>
+
+      <div
+        style="
+          font-family:Arial,Helvetica,sans-serif;
+          font-size:13px;
+          line-height:1.6;
+          color:#5e6985;
+        "
+      >
+        Structuration & développement d’activités
+      </div>
+
+      <a
+        href="https://systia.fr"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="
+          display:inline-block;
+          margin-top:4px;
+          font-family:Arial,Helvetica,sans-serif;
+          font-size:13px;
+          line-height:1.6;
+          color:#2f63e9;
+          text-decoration:none;
+        "
+      >
+        systia.fr
+      </a>
+    </div>
+  `;
+}
+
+function buildSystiaSignatureText() {
+  return [
+    "SYSTIA",
+    "Structuration & développement d’activités",
+    "https://systia.fr",
+  ].join("\n");
 }
 
 function buildAnswersHtml(answers?: ProjectionAnswers) {
@@ -106,6 +179,7 @@ function buildProjectionHtml({
   firstName,
   email,
   activity,
+  message,
   answers,
   projectionSnapshot,
 }: SendProjectionLeadEmailParams) {
@@ -118,7 +192,7 @@ function buildProjectionHtml({
     <div style="font-family:Arial,Helvetica,sans-serif; color:#17304f; line-height:1.6; background:#f6f9ff; padding:32px;">
       <div style="max-width:720px; margin:0 auto; background:#ffffff; border:1px solid #dbe6f6; border-radius:20px; padding:32px;">
         <p style="margin:0 0 8px; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#6f83a7; font-weight:700;">
-          Nouveau lead Projection
+          Nouveau lead SYSTIA
         </p>
 
         <h1 style="margin:0 0 20px; font-size:28px; line-height:1.2; color:#102b52;">
@@ -128,7 +202,11 @@ function buildProjectionHtml({
         <div style="margin:0 0 24px; padding:18px 20px; background:#f8fbff; border:1px solid #e3eaf5; border-radius:16px;">
           <p style="margin:0 0 8px;"><strong>Prénom :</strong> ${escapeHtml(firstName)}</p>
           <p style="margin:0 0 8px;"><strong>Email :</strong> ${escapeHtml(email)}</p>
-          <p style="margin:0;"><strong>Activité :</strong> ${escapeHtml(activity || "Non renseignée")}</p>
+          <p style="margin:0 0 8px;"><strong>Activité :</strong> ${escapeHtml(activity || "Non renseignée")}</p>
+          <p style="margin:0;">
+            <strong>Renseignement complémentaire :</strong><br />
+            ${escapeHtml(message || "Non renseigné")}
+          </p>
         </div>
 
         <h2 style="margin:0 0 12px; font-size:18px; color:#173b73;">Réponses du questionnaire</h2>
@@ -141,23 +219,17 @@ function buildProjectionHtml({
 
         <div style="display:grid; gap:12px;">
           <div style="padding:16px 18px; background:#fbfdff; border:1px solid #e3eaf5; border-radius:14px;">
-            <p style="margin:0 0 6px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f83a7; font-weight:700;">
-              Vision
-            </p>
+            <p style="margin:0 0 6px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f83a7; font-weight:700;">Vision</p>
             <p style="margin:0; white-space:pre-line;">${escapeHtml(vision)}</p>
           </div>
 
           <div style="padding:16px 18px; background:#fbfdff; border:1px solid #e3eaf5; border-radius:14px;">
-            <p style="margin:0 0 6px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f83a7; font-weight:700;">
-              Diagnostic
-            </p>
+            <p style="margin:0 0 6px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f83a7; font-weight:700;">Diagnostic</p>
             <p style="margin:0; white-space:pre-line;">${escapeHtml(clarity)}</p>
           </div>
 
           <div style="padding:16px 18px; background:#fbfdff; border:1px solid #e3eaf5; border-radius:14px;">
-            <p style="margin:0 0 6px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f83a7; font-weight:700;">
-              Suite proposée
-            </p>
+            <p style="margin:0 0 6px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6f83a7; font-weight:700;">Suite proposée</p>
             <p style="margin:0; white-space:pre-line;">${escapeHtml(nextStep)}</p>
           </div>
         </div>
@@ -170,17 +242,19 @@ function buildProjectionText({
   firstName,
   email,
   activity,
+  message,
   answers,
   projectionSnapshot,
 }: SendProjectionLeadEmailParams) {
   const answersText = buildAnswersText(answers);
 
   return `
-Nouveau lead Projection
+Nouveau lead SYSTIA
 
 Prénom : ${firstName}
 Email : ${email}
 Activité : ${activity || "Non renseignée"}
+Renseignement complémentaire : ${message || "Non renseigné"}
 
 Réponses du questionnaire :
 ${answersText}
@@ -197,12 +271,7 @@ function buildUserAutoReplyHtml({ firstName }: SendUserAutoReplyEmailParams) {
 
   return `
   <div style="margin:0;padding:0;background-color:#eef2f8;">
-    <table
-      width="100%"
-      cellspacing="0"
-      cellpadding="0"
-      style="border-collapse:collapse;background-color:#eef2f8;padding:26px 12px;"
-    >
+    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;background-color:#eef2f8;padding:26px 12px;">
       <tr>
         <td align="center">
           <table
@@ -222,43 +291,18 @@ function buildUserAutoReplyHtml({ firstName }: SendUserAutoReplyEmailParams) {
           >
             <tr>
               <td style="padding:22px 26px 14px 26px;border-bottom:1px solid #e5ebf5;">
-                <div
-                  style="
-                    font-family:Arial,sans-serif;
-                    font-size:11px;
-                    letter-spacing:2px;
-                    text-transform:uppercase;
-                    color:#6c7ea6;
-                    margin-bottom:8px;
-                  "
-                >
-                  DIAGNOSTIC PROJECTION
+                <div style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#6c7ea6;margin-bottom:8px;">
+                  DIAGNOSTIC SYSTIA
                 </div>
 
-                <div
-                  style="
-                    font-family:Arial,sans-serif;
-                    font-size:24px;
-                    font-weight:600;
-                    color:#1f2740;
-                    margin:0;
-                  "
-                >
+                <div style="font-family:Arial,sans-serif;font-size:24px;font-weight:600;color:#1f2740;margin:0;">
                   Votre demande a bien été reçue
                 </div>
               </td>
             </tr>
 
             <tr>
-              <td
-                style="
-                  padding:24px 26px 8px 26px;
-                  font-family:Arial,sans-serif;
-                  color:#33415c;
-                  font-size:15px;
-                  line-height:1.75;
-                "
-              >
+              <td style="padding:24px 26px 8px 26px;font-family:Arial,sans-serif;color:#33415c;font-size:15px;line-height:1.75;">
                 <p style="margin:0 0 16px 0;">Bonjour ${escapeHtml(formattedFirstName)},</p>
 
                 <p style="margin:0 0 16px; font-size:15px; line-height:1.8; color:#52617f;">
@@ -266,7 +310,7 @@ function buildUserAutoReplyHtml({ firstName }: SendUserAutoReplyEmailParams) {
                 </p>
 
                 <p style="margin:0 0 16px; font-size:15px; line-height:1.8; color:#52617f;">
-                  J’ai bien reçu les éléments transmis via le diagnostic.
+                  J’ai bien reçu les éléments transmis via le diagnostic SYSTIA.
                 </p>
 
                 <p style="margin:0 0 22px; font-size:15px; line-height:1.8; color:#52617f;">
@@ -277,12 +321,7 @@ function buildUserAutoReplyHtml({ firstName }: SendUserAutoReplyEmailParams) {
                   Bien à vous,
                 </p>
 
-                <div style="text-align:center;">
-                  <div style="font-family:Georgia,serif;font-size:28px;color:#1f2740;">AC</div>
-                  <a href="https://arnaudcrestey.com" style="color:#2f63e9;text-decoration:none;font-size:13px;">
-                    arnaudcrestey.com
-                  </a>
-                </div>
+                ${buildSystiaSignatureHtml()}
               </td>
             </tr>
           </table>
@@ -301,13 +340,12 @@ function buildUserAutoReplyText({ firstName }: SendUserAutoReplyEmailParams) {
     "",
     "Merci pour votre demande.",
     "",
-    "J’ai bien reçu les éléments transmis via le diagnostic.",
+    "J’ai bien reçu les éléments transmis via le diagnostic SYSTIA.",
     "",
     "Je vais reprendre votre situation avec attention afin d’en dégager les points essentiels, puis vous adresser un retour personnalisé.",
     "",
     "Bien à vous,",
-    "Arnaud Crestey",
-    "arnaudcrestey.com",
+    buildSystiaSignatureText(),
   ].join("\n");
 }
 
@@ -323,10 +361,10 @@ export async function sendProjectionLeadEmail(
   }
 
   await transporter.sendMail({
-    from: `Arnaud Crestey <${from}>`,
+    from: `SYSTIA <${from}>`,
     to,
     replyTo: params.email,
-    subject: `Nouvelle demande Projection — ${params.firstName}`,
+    subject: `Nouvelle demande SYSTIA — ${params.firstName}`,
     text: buildProjectionText(params),
     html: buildProjectionHtml(params),
   });
@@ -343,7 +381,7 @@ export async function sendUserAutoReplyEmail(
   }
 
   await transporter.sendMail({
-    from: `Arnaud Crestey <${from}>`,
+    from: `SYSTIA <${from}>`,
     to: params.email,
     subject: "Votre demande a bien été reçue",
     text: buildUserAutoReplyText(params),
