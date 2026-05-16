@@ -57,10 +57,9 @@ function createTransporter() {
     },
   });
 }
-
 function buildSystiaSignatureHtml() {
   return `
-    <div style="text-align:center;margin-top:8px;">
+    <div style="text-align:center;margin-top:10px;">
       <a
         href="https://systia.fr"
         target="_blank"
@@ -70,10 +69,10 @@ function buildSystiaSignatureHtml() {
         <div
           style="
             font-family:Georgia,'Times New Roman',serif;
-            font-size:40px;
+            font-size:30px;
             line-height:1;
-            letter-spacing:-0.04em;
-            color:#10224b;
+            letter-spacing:-0.05em;
+            color:#13285c;
             font-weight:400;
             text-transform:uppercase;
           "
@@ -84,19 +83,20 @@ function buildSystiaSignatureHtml() {
 
       <div
         style="
-          width:46px;
+          width:34px;
           height:1px;
-          background:#d7ddea;
-          margin:12px auto 10px auto;
+          background:#d9e0ec;
+          margin:10px auto 9px auto;
         "
       ></div>
 
       <div
         style="
           font-family:Arial,Helvetica,sans-serif;
-          font-size:13px;
-          line-height:1.6;
-          color:#5e6985;
+          font-size:11px;
+          line-height:1.7;
+          letter-spacing:0.01em;
+          color:#7b879f;
         "
       >
         Structuration & développement d’activités
@@ -108,11 +108,11 @@ function buildSystiaSignatureHtml() {
         rel="noopener noreferrer"
         style="
           display:inline-block;
-          margin-top:4px;
+          margin-top:2px;
           font-family:Arial,Helvetica,sans-serif;
-          font-size:13px;
+          font-size:11px;
           line-height:1.6;
-          color:#2f63e9;
+          color:#4f6fb6;
           text-decoration:none;
         "
       >
