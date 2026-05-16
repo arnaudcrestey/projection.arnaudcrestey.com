@@ -16,12 +16,14 @@ type FormState = {
   firstName: string;
   email: string;
   activity: string;
+  message: string;
 };
 
 const initialState: FormState = {
   firstName: "",
   email: "",
   activity: "",
+  message: "",
 };
 
 export function LeadForm({ projectionSnapshot, answers }: LeadFormProps) {
@@ -56,6 +58,7 @@ export function LeadForm({ projectionSnapshot, answers }: LeadFormProps) {
           firstName: form.firstName.trim(),
           email: form.email.trim(),
           activity: form.activity.trim(),
+          message: form.message.trim(),
           answers,
           projectionSnapshot,
         }),
@@ -91,7 +94,9 @@ export function LeadForm({ projectionSnapshot, answers }: LeadFormProps) {
             </h2>
 
             <p className="mt-4 text-[14px] leading-7 text-[#5d7399] md:text-[16px] md:leading-8">
-              Ce premier diagnostic pose une base claire. Si vous souhaitez aller plus loin, je peux vous accompagner pour rendre votre activité plus lisible et plus facile à comprendre pour les bonnes personnes.
+              Ce premier diagnostic pose une base claire. Si vous souhaitez aller
+              plus loin, je peux vous accompagner pour rendre votre activité plus
+              lisible et plus facile à comprendre pour les bonnes personnes.
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2.5">
@@ -155,6 +160,20 @@ export function LeadForm({ projectionSnapshot, answers }: LeadFormProps) {
               />
             </label>
 
+            <label className="block">
+              <span className="mb-2 block text-[12px] font-medium text-[#5e7397] md:text-[13px]">
+                Renseignement complémentaire{" "}
+                <span className="font-normal text-[#8b9bb8]">(facultatif)</span>
+              </span>
+              <textarea
+                value={form.message}
+                onChange={(event) => updateField("message", event.target.value)}
+                placeholder="Vous pouvez ajouter ici une précision, une difficulté actuelle, un besoin particulier ou un contexte utile."
+                rows={4}
+                className="min-h-[120px] w-full resize-y rounded-[18px] border border-[#d9e3f2] bg-white px-4 py-4 text-[14px] leading-7 text-[#17304f] shadow-[inset_0_1px_2px_rgba(15,23,42,0.02)] outline-none transition placeholder:text-[#9aacbf] focus:border-[#b7c9e8] focus:ring-4 focus:ring-[#eaf1ff] md:text-[15px]"
+              />
+            </label>
+
             {error ? (
               <p className="rounded-[14px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                 {error}
@@ -166,11 +185,14 @@ export function LeadForm({ projectionSnapshot, answers }: LeadFormProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex min-h-[50px] w-full items-center justify-center rounded-full bg-[linear-gradient(135deg,#2f63e9_0%,#2d58cf_100%)] px-7 text-[14px] font-semibold tracking-[0.01em] text-white shadow-[0_16px_34px_rgba(47,99,233,0.24)] transition hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(47,99,233,0.3)] disabled:cursor-not-allowed disabled:opacity-60 sm:max-w-[320px] md:min-h-[54px] md:px-8 md:text-[15px]"
+                  className="group relative inline-flex min-h-[54px] w-full items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(135deg,#2f63e9_0%,#264fc0_100%)] px-8 text-[14px] font-semibold tracking-[-0.01em] text-white shadow-[0_18px_40px_rgba(47,99,233,0.24)] transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_24px_54px_rgba(47,99,233,0.34)] active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:max-w-[360px] md:min-h-[56px] md:px-10 md:text-[15px]"
                 >
-                  {loading
-                    ? "Envoi en cours..."
-                    : "Recevoir un retour sur mon activité"}
+                  <span className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.14)_0%,rgba(255,255,255,0)_58%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <span className="relative z-10">
+                    {loading
+                      ? "Envoi en cours..."
+                      : "Recevoir un retour personnalisé"}
+                  </span>
                 </button>
 
                 <p className="max-w-xl text-center text-[12px] leading-6 text-[#7b8dab] md:text-[13px]">
